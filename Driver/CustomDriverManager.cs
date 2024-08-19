@@ -1,26 +1,28 @@
 ﻿using System.Collections.Concurrent;
 using OpenQA.Selenium;
 using TestFramework.Driver.CommonOptions;
-using TestFramework.Driver.DriverFactory;
+using TestFramework.Driver.DriverFactory1;
+
 
 namespace TestFramework.Driver;
 
-public class DriverManager
+public class CustomDriverManager
 {
-    private readonly IDriverFactory _driverFactory;
+    private readonly DriverFactory _driverFactory;
     
-    private DriverManager()
+    private CustomDriverManager()
     {
-        _driverFactory = new DriverFactory.DriverFactory(
+        _driverFactory = new DriverFactory(
             new ChromeDriverOptionsFactory(),
-            new FirefoxDriverOptionsFactory());
+            new FirefoxDriverOptionsFactory()
+            );
     }
     
-    private static readonly Lazy<DriverManager> _instance = new Lazy<DriverManager>(() => new DriverManager());
+    private static readonly Lazy<CustomDriverManager> Instance = new(() => new CustomDriverManager());
 
-    public static DriverManager Instance => _instance.Value;
+    public static CustomDriverManager CustomDriverManagerInstance => Instance.Value;
 
-    private readonly ConcurrentDictionary<BrowserType, IWebDriver> _drivers = new ConcurrentDictionary<BrowserType, IWebDriver>();
+    private readonly ConcurrentDictionary<BrowserType, IWebDriver> _drivers = new();
 
     public IWebDriver GetDriver(BrowserType browserType)
     {
@@ -32,7 +34,7 @@ public class DriverManager
         });
     }
 
-    public void CloseALlDrivers()
+    public void CloseAllDrivers()
     {
         foreach (var driver in _drivers.Values)
         {

@@ -3,7 +3,7 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using TestFramework.Driver.CommonOptions;
 
-namespace TestFramework.Driver.DriverFactory;
+namespace TestFramework.Driver.DriverFactory1;
 
 public class DriverFactory : IDriverFactory
 {
@@ -20,14 +20,11 @@ public class DriverFactory : IDriverFactory
 
     public IWebDriver CreateDriver(BrowserType browserType)
     {
-        switch (browserType)
+        return browserType switch
         {
-            case BrowserType.Chrome:
-                return new ChromeDriver(_chromeOptionsFactory.CreateOptions());
-            case BrowserType.Firefox:
-                return new FirefoxDriver(_firefoxOptionsFactory.CreateOptions());
-            default:
-                throw new ArgumentException($"Unsupported browser type: {browserType}");
-        }
+            BrowserType.Chrome => new ChromeDriver(_chromeOptionsFactory.CreateOptions()),
+            BrowserType.Firefox => new FirefoxDriver(_firefoxOptionsFactory.CreateOptions()),
+            _ => throw new ArgumentException($"Unsupported browser type: {browserType}")
+        };
     }
 }

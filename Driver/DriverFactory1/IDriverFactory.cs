@@ -1,6 +1,6 @@
 ﻿using OpenQA.Selenium;
 
-namespace TestFramework.Driver.DriverFactory;
+namespace TestFramework.Driver.DriverFactory1;
 
 public interface IDriverFactory
 {
